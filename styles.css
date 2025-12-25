@@ -16,11 +16,8 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1100px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
+    max-width: 480px;
+    margin: 0 auto;
 }
 
 .login-card {
@@ -358,72 +355,15 @@ body {
     font-size: 1rem;
 }
 
-.features-section {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
-.features-section h3 {
-    color: #34495e;
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.feature-item {
-    display: flex;
-    align-items: start;
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 20px;
-    background: #f8fafb;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
-
-.feature-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.feature-item:last-child {
-    margin-bottom: 0;
-}
-
-.feature-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-}
-
-.feature-text h4 {
-    color: #34495e;
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-}
-
-.feature-text p {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
 /* Responsive Design */
 @media (max-width: 992px) {
     .container {
-        grid-template-columns: 1fr;
-        max-width: 500px;
-    }
-
-    .features-section {
-        order: -1;
+        max-width: 480px;
     }
 }
 
 @media (max-width: 768px) {
-    .login-card,
-    .features-section {
+    .login-card {
         padding: 30px 20px;
     }
 
@@ -446,8 +386,7 @@ body {
         padding: 10px;
     }
 
-    .login-card,
-    .features-section {
+    .login-card {
         padding: 25px 15px;
     }
 
@@ -494,10 +433,6 @@ body {
 
 .login-card {
     animation: slideIn 0.5s ease;
-}
-
-.features-section {
-    animation: slideIn 0.6s ease;
 }
 
 @keyframes shake {

@@ -1,21 +1,87 @@
 // Get DOM elements
-const loginForm = document.getElementById('login-form');
+const loginForm = document.getElementById('loginForm');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
-const togglePasswordBtn = document.getElementById('toggle-password');
-const eyeIcon = document.querySelector('.eye-icon');
-const rememberCheckbox = document.getElementById('remember');
-const emailError = document.getElementById('email-error');
-const passwordError = document.getElementById('password-error');
-const successMessage = document.getElementById('success-message');
-const googleLoginBtn = document.getElementById('google-login');
-const facebookLoginBtn = document.getElementById('facebook-login');
+const nameInput = document.getElementById('name');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+const togglePasswordBtn = document.getElementById('togglePassword');
+const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+const eyeIcon = document.getElementById('eyeIcon');
+const eyeIconConfirm = document.getElementById('eyeIconConfirm');
+const rememberCheckbox = document.getElementById('rememberMe');
+const emailError = document.getElementById('emailError');
+const passwordError = document.getElementById('passwordError');
+const nameError = document.getElementById('nameError');
+const confirmPasswordError = document.getElementById('confirmPasswordError');
+const successMessage = document.getElementById('successMessage');
+const googleLoginBtn = document.querySelector('.social-btn.google');
+const facebookLoginBtn = document.querySelector('.social-btn.facebook');
+const submitBtn = document.getElementById('submitBtn');
+const toggleFormLink = document.getElementById('toggleFormLink');
+const toggleFormText = document.getElementById('toggleFormText');
+const formTitle = document.getElementById('formTitle');
+const formSubtitle = document.getElementById('formSubtitle');
+const successTitle = document.getElementById('successTitle');
+const successText = document.getElementById('successText');
+const nameField = document.querySelector('.name-field');
+const confirmPasswordField = document.querySelector('.confirm-password-field');
+const formOptions = document.querySelector('.form-options');
+
+// Track current mode (login or signup)
+let isSignupMode = false;
+
+// Track current mode (login or signup)
+let isSignupMode = false;
+
+// Toggle between login and signup modes
+toggleFormLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    isSignupMode = !isSignupMode;
+    
+    if (isSignupMode) {
+        // Switch to signup mode
+        formTitle.textContent = 'Create Account';
+        formSubtitle.textContent = 'Sign up to get started';
+        submitBtn.textContent = 'Sign Up';
+        toggleFormText.innerHTML = 'Already have an account? <a href="#" id="toggleFormLink">Login</a>';
+        nameField.style.display = 'block';
+        confirmPasswordField.style.display = 'block';
+        formOptions.style.display = 'none';
+    } else {
+        // Switch to login mode
+        formTitle.textContent = 'Welcome Back!';
+        formSubtitle.textContent = 'Please login to your account';
+        submitBtn.textContent = 'Login';
+        toggleFormText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleFormLink">Sign Up</a>';
+        nameField.style.display = 'none';
+        confirmPasswordField.style.display = 'none';
+        formOptions.style.display = 'flex';
+        
+        // Clear signup fields
+        nameInput.value = '';
+        confirmPasswordInput.value = '';
+        nameError.textContent = '';
+        confirmPasswordError.textContent = '';
+        nameInput.classList.remove('error', 'success');
+        confirmPasswordInput.classList.remove('error', 'success');
+    }
+    
+    // Re-bind the toggle link event
+    document.getElementById('toggleFormLink').addEventListener('click', arguments.callee);
+});
 
 // Toggle password visibility
 togglePasswordBtn.addEventListener('click', () => {
     const type = passwordInput.type === 'password' ? 'text' : 'password';
     passwordInput.type = type;
     eyeIcon.textContent = type === 'password' ? '👁️' : '🙈';
+});
+
+// Toggle confirm password visibility
+toggleConfirmPasswordBtn.addEventListener('click', () => {
+    const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+    confirmPasswordInput.type = type;
+    eyeIconConfirm.textContent = type === 'password' ? '👁️' : '🙈';
 });
 
 // Email validation
@@ -26,7 +92,17 @@ function validateEmail(email) {
 
 // Password validation
 function validatePassword(password) {
-    return password.length >= 8;
+    return password.length >= 6;
+}
+
+// Name validation
+function validateName(name) {
+    return name.trim().length >= 2;
+}
+
+// Check if passwords match
+function passwordsMatch(password, confirmPassword) {
+    return password === confirmPassword;
 }
 
 // Show error
@@ -66,9 +142,38 @@ passwordInput.addEventListener('blur', () => {
     if (passwordValue === '') {
         showError(passwordInput, passwordError, 'Password is required');
     } else if (!validatePassword(passwordValue)) {
-        showError(passwordInput, passwordError, 'Password must be at least 8 characters');
+        showError(passwordInput, passwordError, 'Password must be at least 6 characters');
     } else {
         showSuccess(passwordInput, passwordError);
+    }
+});
+
+nameInput.addEventListener('blur', () => {
+    if (isSignupMode) {
+        const nameValue = nameInput.value.trim();
+        
+        if (nameValue === '') {
+            showError(nameInput, nameError, 'Name is required');
+        } else if (!validateName(nameValue)) {
+            showError(nameInput, nameError, 'Name must be at least 2 characters');
+        } else {
+            showSuccess(nameInput, nameError);
+        }
+    }
+});
+
+confirmPasswordInput.addEventListener('blur', () => {
+    if (isSignupMode) {
+        const confirmPasswordValue = confirmPasswordInput.value;
+        const passwordValue = passwordInput.value;
+        
+        if (confirmPasswordValue === '') {
+            showError(confirmPasswordInput, confirmPasswordError, 'Please confirm your password');
+        } else if (!passwordsMatch(passwordValue, confirmPasswordValue)) {
+            showError(confirmPasswordInput, confirmPasswordError, 'Passwords do not match');
+        } else {
+            showSuccess(confirmPasswordInput, confirmPasswordError);
+        }
     }
 });
 
@@ -84,6 +189,20 @@ passwordInput.addEventListener('input', () => {
     if (passwordInput.classList.contains('error')) {
         passwordInput.classList.remove('error');
         passwordError.textContent = '';
+    }
+});
+
+nameInput.addEventListener('input', () => {
+    if (nameInput.classList.contains('error')) {
+        nameInput.classList.remove('error');
+        nameError.textContent = '';
+    }
+});
+
+confirmPasswordInput.addEventListener('input', () => {
+    if (confirmPasswordInput.classList.contains('error')) {
+        confirmPasswordInput.classList.remove('error');
+        confirmPasswordError.textContent = '';
     }
 });
 
@@ -111,19 +230,56 @@ loginForm.addEventListener('submit', (e) => {
         showError(passwordInput, passwordError, 'Password is required');
         isValid = false;
     } else if (!validatePassword(passwordValue)) {
-        showError(passwordInput, passwordError, 'Password must be at least 8 characters');
+        showError(passwordInput, passwordError, 'Password must be at least 6 characters');
         isValid = false;
     } else {
         showSuccess(passwordInput, passwordError);
     }
     
+    // Additional validation for signup mode
+    if (isSignupMode) {
+        const nameValue = nameInput.value.trim();
+        const confirmPasswordValue = confirmPasswordInput.value;
+        
+        // Validate name
+        if (nameValue === '') {
+            showError(nameInput, nameError, 'Name is required');
+            isValid = false;
+        } else if (!validateName(nameValue)) {
+            showError(nameInput, nameError, 'Name must be at least 2 characters');
+            isValid = false;
+        } else {
+            showSuccess(nameInput, nameError);
+        }
+        
+        // Validate confirm password
+        if (confirmPasswordValue === '') {
+            showError(confirmPasswordInput, confirmPasswordError, 'Please confirm your password');
+            isValid = false;
+        } else if (!passwordsMatch(passwordValue, confirmPasswordValue)) {
+            showError(confirmPasswordInput, confirmPasswordError, 'Passwords do not match');
+            isValid = false;
+        } else {
+            showSuccess(confirmPasswordInput, confirmPasswordError);
+        }
+    }
+    
     // If form is valid, show success message
     if (isValid) {
-        // Handle remember me
-        if (rememberCheckbox.checked) {
+        // Handle remember me (only in login mode)
+        if (!isSignupMode && rememberCheckbox.checked) {
             localStorage.setItem('rememberedEmail', emailValue);
-        } else {
+        } else if (!isSignupMode) {
             localStorage.removeItem('rememberedEmail');
+        }
+        
+        // Update success message based on mode
+        if (isSignupMode) {
+            successTitle.textContent = 'Account Created!';
+            successText.textContent = 'Welcome! Redirecting to your dashboard...';
+        } else {
+            successTitle.textContent = 'Login Successful!';
+            successText.textContent = 'Redirecting to dashboard...';
         }
         
         // Show success message
@@ -134,6 +290,8 @@ loginForm.addEventListener('submit', (e) => {
             loginForm.reset();
             emailInput.classList.remove('success');
             passwordInput.classList.remove('success');
+            nameInput.classList.remove('success');
+            confirmPasswordInput.classList.remove('success');
             successMessage.classList.add('hidden');
         }, 3000);
     }
@@ -141,24 +299,23 @@ loginForm.addEventListener('submit', (e) => {
 
 // Social login handlers
 googleLoginBtn.addEventListener('click', () => {
-    alert('Google login would be implemented here!\n\nThis is a UI-only demo. In a real application, this would connect to Google OAuth.');
+    const mode = isSignupMode ? 'Sign up' : 'Login';
+    alert(`Google ${mode.toLowerCase()} would be implemented here!\n\nThis is a UI-only demo. In a real application, this would connect to Google OAuth.`);
 });
 
 facebookLoginBtn.addEventListener('click', () => {
-    alert('Facebook login would be implemented here!\n\nThis is a UI-only demo. In a real application, this would connect to Facebook OAuth.');
+    const mode = isSignupMode ? 'Sign up' : 'Login';
+    alert(`Facebook ${mode.toLowerCase()} would be implemented here!\n\nThis is a UI-only demo. In a real application, this would connect to Facebook OAuth.`);
 });
 
 // Forgot password handler
-document.querySelector('.forgot-password').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Password reset functionality would be implemented here!\n\nThis is a UI-only demo. In a real application, this would send a reset email.');
-});
-
-// Sign up handler
-document.querySelector('.signup-link a').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Sign up page would be implemented here!\n\nThis is a UI-only demo. In a real application, this would navigate to the registration page.');
-});
+const forgotPasswordLink = document.querySelector('.forgot-password');
+if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Password reset functionality would be implemented here!\n\nThis is a UI-only demo. In a real application, this would send a reset email.');
+    });
+}
 
 // Check for remembered email on page load
 window.addEventListener('DOMContentLoaded', () => {
@@ -175,6 +332,13 @@ togglePasswordBtn.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         togglePasswordBtn.click();
+    }
+});
+
+toggleConfirmPasswordBtn.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleConfirmPasswordBtn.click();
     }
 });
 
@@ -232,6 +396,6 @@ function calculatePasswordStrength(password) {
 }
 
 // Console message
-console.log('%c🔐 Simple Login Form UI', 'color: #3498db; font-size: 20px; font-weight: bold;');
+console.log('%c🔐 Simple Login/Signup Form UI', 'color: #3498db; font-size: 20px; font-weight: bold;');
 console.log('%cThis is a UI-only demonstration.', 'color: #7f8c8d; font-size: 14px;');
 console.log('%cNo actual authentication is performed.', 'color: #7f8c8d; font-size: 14px;');
