@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Welcome Back!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">🔐</div>
+                <h1 class="title">Welcome Back!</h1>
+                <p class="subtitle">Please login to your account</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📧</span>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="6">
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <span class="eye-icon" id="eyeIcon">👁️</span>
+                        </button>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Login</button>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn google">
+                        <span class="social-icon">🌐</span>
+                        <span>Continue with Google</span>
+                    </button>
+                    <button type="button" class="social-btn facebook">
+                        <span class="social-icon">📘</span>
+                        <span>Continue with Facebook</span>
+                    </button>
+                </div>
+
+                <div class="signup-link">
+                    Don't have an account? <a href="#">Sign Up</a>
+                </div>
+            </form>
+
+            <div id="successMessage" class="success-message hidden">
+                <div class="success-icon">✅</div>
+                <h3>Login Successful!</h3>
+                <p>Redirecting to dashboard...</p>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h3>Why Choose Us?</h3>
+            <div class="feature-item">
+                <span class="feature-icon">🔒</span>
+                <div class="feature-text">
+                    <h4>Secure Login</h4>
+                    <p>Your data is protected with encryption</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">⚡</span>
+                <div class="feature-text">
+                    <h4>Fast Access</h4>
+                    <p>Quick and seamless authentication</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🌍</span>
+                <div class="feature-text">
+                    <h4>Anywhere Access</h4>
+                    <p>Login from any device, anytime</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
