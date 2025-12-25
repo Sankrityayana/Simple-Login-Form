@@ -30,44 +30,40 @@ const formOptions = document.querySelector('.form-options');
 // Track current mode (login or signup)
 let isSignupMode = false;
 
-// Track current mode (login or signup)
-let isSignupMode = false;
-
-// Toggle between login and signup modes
-toggleFormLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    isSignupMode = !isSignupMode;
-    
-    if (isSignupMode) {
-        // Switch to signup mode
-        formTitle.textContent = 'Create Account';
-        formSubtitle.textContent = 'Sign up to get started';
-        submitBtn.textContent = 'Sign Up';
-        toggleFormText.innerHTML = 'Already have an account? <a href="#" id="toggleFormLink">Login</a>';
-        nameField.style.display = 'block';
-        confirmPasswordField.style.display = 'block';
-        formOptions.style.display = 'none';
-    } else {
-        // Switch to login mode
-        formTitle.textContent = 'Welcome Back!';
-        formSubtitle.textContent = 'Please login to your account';
-        submitBtn.textContent = 'Login';
-        toggleFormText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleFormLink">Sign Up</a>';
-        nameField.style.display = 'none';
-        confirmPasswordField.style.display = 'none';
-        formOptions.style.display = 'flex';
+// Toggle between login and signup modes using event delegation
+toggleFormText.addEventListener('click', (e) => {
+    if (e.target.id === 'toggleFormLink') {
+        e.preventDefault();
+        isSignupMode = !isSignupMode;
         
-        // Clear signup fields
-        nameInput.value = '';
-        confirmPasswordInput.value = '';
-        nameError.textContent = '';
-        confirmPasswordError.textContent = '';
-        nameInput.classList.remove('error', 'success');
-        confirmPasswordInput.classList.remove('error', 'success');
+        if (isSignupMode) {
+            // Switch to signup mode
+            formTitle.textContent = 'Create Account';
+            formSubtitle.textContent = 'Sign up to get started';
+            submitBtn.textContent = 'Sign Up';
+            toggleFormText.innerHTML = 'Already have an account? <a href="#" id="toggleFormLink">Login</a>';
+            nameField.style.display = 'block';
+            confirmPasswordField.style.display = 'block';
+            formOptions.style.display = 'none';
+        } else {
+            // Switch to login mode
+            formTitle.textContent = 'Welcome Back!';
+            formSubtitle.textContent = 'Please login to your account';
+            submitBtn.textContent = 'Login';
+            toggleFormText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleFormLink">Sign Up</a>';
+            nameField.style.display = 'none';
+            confirmPasswordField.style.display = 'none';
+            formOptions.style.display = 'flex';
+            
+            // Clear signup fields
+            nameInput.value = '';
+            confirmPasswordInput.value = '';
+            nameError.textContent = '';
+            confirmPasswordError.textContent = '';
+            nameInput.classList.remove('error', 'success');
+            confirmPasswordInput.classList.remove('error', 'success');
+        }
     }
-    
-    // Re-bind the toggle link event
-    document.getElementById('toggleFormLink').addEventListener('click', arguments.callee);
 });
 
 // Toggle password visibility
